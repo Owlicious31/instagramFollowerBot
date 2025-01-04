@@ -43,7 +43,7 @@ def load_env_variables() -> dict[str,str]:
 def main() -> None:
     """
     Main function. Initialize the Instagram bot and follow followers.
-    :return:
+    :return: None
     """
     env_vars: dict = load_env_variables()
 
