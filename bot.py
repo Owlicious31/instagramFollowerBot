@@ -72,7 +72,7 @@ class InstagramBot:
             raise
 
         except TimeoutException:
-            logging.error("Could not find log in button, timed out.")
+            logging.error("Could not log in, timed out. Ensure your credentials are correct.")
             raise
 
         except Exception as e:
