@@ -1,5 +1,6 @@
 import os
 import logging
+from enum import Enum
 from dotenv import load_dotenv
 
 from bot import InstagramBot
@@ -13,31 +14,24 @@ if ENVIRONMENT == "DEMO":
 else:
     load_dotenv()
 
+class EnvVars(Enum):
+    EMAIL = os.getenv("INSTAGRAM_EMAIL")
+    PASSWORD = os.getenv("INSTAGRAM_PASSWORD")
 
-def load_env_variables() -> dict[str,str]:
+def load_env_variables():
     """
     Load Environment variables
     :return: None
     """
-    vars_loaded: bool = True
+    vars_loaded = True
 
-    email: str = os.getenv("INSTAGRAM_EMAIL")
-    password: str = os.getenv("INSTAGRAM_PASSWORD")
-
-    env_vars: dict = {
-        "INSTAGRAM_EMAIL":email,
-        "INSTAGRAM_PASSWORD":password,
-    }
-
-    for name,var in env_vars.items():
+    for var in EnvVars:
         if not var:
-            logging.error(f"Could not find environment variable: {name}")
+            logging.error(f"Could not find environment variable: {var.name}")
             vars_loaded = False
 
     if not vars_loaded:
         raise Exception("Was unable to load some environment variables")
-
-    return env_vars
 
 
 def main() -> None:
@@ -45,13 +39,9 @@ def main() -> None:
     Main function. Initialize the Instagram bot and follow followers.
     :return: None
     """
-    env_vars: dict = load_env_variables()
-
-    email: str = env_vars["INSTAGRAM_EMAIL"]
-    password: str = env_vars["INSTAGRAM_PASSWORD"]
 
     bot = InstagramBot(target_acc="chefsteps",number_to_follow=10)
-    bot.login_to_instagram(email=email,password=password)
+    bot.login_to_instagram(email=EnvVars.EMAIL.value,password=EnvVars.EMAIL.value)
     bot.find_followers()
     bot.follow_followers()
 
